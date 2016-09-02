@@ -12,12 +12,19 @@ import javax.swing.JTextArea;
 
 public class MeuEditor extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JMenuBar menubar = new JMenuBar();
 	private JMenu menu = new JMenu("Arquivo");
 	private JTextArea texto = new JTextArea();
 
+	//define o evento de salvamento do arquivo	
 	private Action salvar = new SalvarAction(this.texto);
+	private Action abrir = new AbrirArquivo(this.texto);
 
+	//construtor: pede uma janela ao SO, cria um menu e uma área para escrita
 	public MeuEditor() {
 		super("Meu Editor");
 
@@ -28,24 +35,32 @@ public class MeuEditor extends JFrame {
 		this.montaGUI(interno);
 	}
 
+	//constrói um menu com um item para salvar o arquivo
 	private void montaMenu() {
 
 		JMenuItem itemSalvar = new JMenuItem(this.salvar);
 
 		this.menu.add(itemSalvar);
 
+		JMenuItem itemAbrir = new JMenuItem(this.abrir);
+
+		this.menu.add(itemAbrir);
+
+		
 		this.menubar.add(this.menu);
 		this.setJMenuBar(this.menubar);
 	}
 
+	//define o layout e insere um textarea no container principal da janela
 	private void montaGUI(Container interno) {
 		interno.setLayout(new BorderLayout());		
 		interno.add(new JScrollPane(this.texto));
 	}
 
+	//método principal: instancia a classe, define as dimensões da janela e sua visibilidade	
 	public static void main(String[] args) {
 		MeuEditor janela = new MeuEditor();
 		janela.setSize(640, 480);
-		janela.setVisible(true);
-	}
+		janela.setVisible(true);		
+}
 }

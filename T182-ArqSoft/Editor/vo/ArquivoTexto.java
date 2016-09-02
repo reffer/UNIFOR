@@ -5,7 +5,7 @@ import java.io.File;
 public class ArquivoTexto {
 	
 	private File arquivo;
-	private String conteudo;
+	private String conteudo;	
 	
 	public File getArquivo() {
 		return arquivo;
@@ -18,6 +18,5 @@ public class ArquivoTexto {
 	}
 	public void setConteudo(String conteudo) {
 		this.conteudo = conteudo;
-	}
-
+	}	
 }

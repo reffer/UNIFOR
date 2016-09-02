@@ -1,70 +1,46 @@
 package br.unifor.view;
-import br.unifor.vo.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+
+import br.unifor.business.EditorBS;
+import br.unifor.vo.ArquivoTexto;
 
 public class SalvarAction extends AbstractAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextArea texto;
 
+	//construtor: recebe o texto inserido pelo usuário no textarea da janela
 	public SalvarAction(JTextArea texto) {		
 		super("Salvar");	
 		this.texto = texto;
-		this.putValue(Action.SHORT_DESCRIPTION, "Salva arquivo texto");
+		this.putValue(Action.SHORT_DESCRIPTION, "Salva arquivo texto");		
 	}
-
+	
+	//captura a ação de clique no item de menu
 	public void actionPerformed(ActionEvent ev) {
+		//cria a tela de diálogo para salvamento do arquivo
 		JFileChooser jfc = new JFileChooser();
 		int resp = jfc.showSaveDialog(this.texto);
 		if (resp != JFileChooser.APPROVE_OPTION)
 			return;
 
+		//seleciona o arquivo de salvamento
 		File arquivo = jfc.getSelectedFile();
 		
 		ArquivoTexto arquivoTexto = new ArquivoTexto();
 		arquivoTexto.setArquivo(arquivo);
 		arquivoTexto.setConteudo(this.texto.getText());
 		
-		if(this.verificaChaves(this.texto.getText()))
-			this.saveFile(arquivo);
-		else 
-			JOptionPane.showMessageDialog(null, "Sintaxe incorreta: chaves incompatíveis.");
+		EditorBS editorBS = new EditorBS(arquivoTexto);
+		editorBS.salvarArquivo();								
 	}
-	
-	private boolean verificaChaves(String conteudo) {
-		
-		StringTokenizer st = new StringTokenizer(conteudo);
-		
-		int contAbertas = 0;
-		int contFechadas = 0;
-		while(st.hasMoreTokens()) {
-			String palavra = st.nextToken();
-			if(palavra.equals("{") || palavra.contains("{"))
-				++contAbertas;
-			if(palavra.equals("}") || palavra.contains("}"))
-				++contFechadas;
-		}		
-			
-		return contAbertas == contFechadas;
-	}
-
-	private void saveFile(File f) {
-		try {
-			FileWriter out = new FileWriter(f);
-			out.write(this.texto.getText());
-			out.close();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-		}
-	}
-
 }
